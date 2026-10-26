@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#173b63"><meta name="description" content="Pointage quotidien Sonelgaz, suivi des heures et rapports mensuels"><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon-192.png">
+<title>Pointage RH — Sonelgaz</title>
+<style>
+:root{--navy:#173b63;--blue:#1769aa;--pale:#edf4fb;--line:#cbd5e1;--ink:#172536;--green:#16754a}
+*{box-sizing:border-box}body{margin:0;background:#f3f6fa;color:var(--ink);font-family:Arial,Tahoma,sans-serif}
+header{background:linear-gradient(120deg,#173b63,#1769aa);color:white;padding:18px 16px}
+header h1{margin:0 0 5px;font-size:22px}header p{margin:0;font-size:14px}
+main{max-width:1000px;margin:auto;padding:14px}
+.card{background:white;border:1px solid #dce4ee;border-radius:14px;padding:15px;margin-bottom:14px;box-shadow:0 3px 12px #173b630b}
+h2{font-size:18px;color:var(--navy);margin:0 0 13px}
+label{display:block;font-size:13px;font-weight:bold;margin-bottom:5px;color:#35485c}
+input,select,textarea{font:inherit;font-size:15px;padding:10px;border:1px solid #bccbda;border-radius:8px;width:100%;background:white;color:var(--ink)}
+textarea{min-height:64px;resize:vertical}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.field{min-width:0;margin-bottom:9px}
+button{font:inherit;font-weight:bold;border:0;border-radius:9px;padding:11px 13px;cursor:pointer}
+.primary{background:var(--blue);color:white}.secondary{background:#e7eff8;color:var(--navy)}.danger{background:#ffeded;color:#9d2323}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{flex:1}
+.tabs{display:flex;gap:7px;overflow:auto;margin-bottom:14px}.tab{white-space:nowrap;background:#e1eaf4;color:#173b63}.tab.active{background:#173b63;color:white}
+.hidden{display:none!important}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{background:var(--pale);border-radius:10px;text-align:center;padding:12px}.stat small{display:block;color:#586b80}.stat strong{font-size:21px;color:var(--navy)}
+.entry{border:1px solid var(--line);border-radius:10px;padding:11px;margin:8px 0}.entrytop{display:flex;justify-content:space-between;gap:8px;font-weight:bold}.muted{font-size:12px;color:#63758a}.empty{text-align:center;padding:18px;color:#718096}
+.note{font-size:12px;color:#586b80;line-height:1.5}
+.report{background:white;padding:16px;overflow:auto}.report h2{text-align:center;text-transform:uppercase;font-size:17px;margin:12px 0 5px}.report h3{text-align:center;font-size:14px;margin:4px 0}.report .meta{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:14px 0;font-size:13px}.report table{width:100%;border-collapse:collapse;font-size:12px}.report th,.report td{border:1px solid #333;padding:5px;text-align:center;vertical-align:middle}.report th{background:#edf1f5}.report td.task{text-align:left;min-width:140px}.signatures{display:flex;justify-content:space-between;gap:18px;margin-top:28px;font-size:12px}.signatures div{min-width:30%}.report-controls{margin-bottom:10px}
+@media(max-width:650px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}.report table{font-size:10px}.report th,.report td{padding:3px}}
+@media print{
+ body{background:white}header,.tabs,.no-print,form,.screen-only{display:none!important}main{padding:0;max-width:none}.card{border:0;box-shadow:none;border-radius:0;padding:0;margin:0}.report{padding:0;overflow:visible}.report table{font-size:10px}.report th,.report td{padding:4px}.report-page{display:none!important}.report-page.printing{display:block!important;break-after:page}.report-page.printing:last-child{break-after:auto}
+}
+</style></head>
+<body>
+<header><h1>Pointage & documents RH — Sonelgaz</h1><p>Enregistrement journalier puis préparation des documents de fin de mois</p></header>
+<main>
+<section class="card">
+<h2>Informations de l’agent</h2>
+<div class="grid">
+<div class="field"><label>Nom et prénom</label><input id="worker" value="OURIHANE ALI"></div>
+<div class="field"><label>Matricule</label><input id="matricule" value="013696"></div>
+<div class="field"><label>Code de service</label><input id="service" value="86F2"></div>
+<div class="field"><label>Fonction</label><input id="fonction" value="TECH PAL MP"></div>
+<div class="field"><label>Structure d’appartenance</label><input id="structure" value="STE/BMD"></div>
+<div class="field"><label>Mois à préparer</label><input id="month" type="month"></div>
+</div>
+<div class="note">Les enregistrements sont conservés dans le navigateur de ce téléphone. Faites régulièrement une sauvegarde JSON. Vérifiez les règles et le format avec RH avant signature/envoi.</div>
+</section>
+<nav class="tabs no-print">
+<button class="tab active" data-tab="daily">Saisie quotidienne</button><button class="tab" data-tab="summary">Résumé mensuel</button><button class="tab" data-tab="declaration">Déclaration HS</button><button class="tab" data-tab="authorization">Autorisation HS</button><button class="tab" data-tab="mission">Fiche de suivi</button>
+</nav>
+<section id="daily" class="tab-content">
+<form class="card" id="entryForm">
+<h2>Nouvelle saisie journalière</h2>
+<div class="grid">
+<div class="field"><label>Date</label><input type="date" id="date" required></div>
+<div class="field"><label>Situation du jour</label><select id="status"><option>Service normal</option><option>RC</option><option>RN</option><option>CA</option><option>Repos</option><option>Férié</option><option>Absence</option><option>Congé maladie</option><option>Mission extérieure</option></select></div>
+<div class="field"><label>Heures normales</label><input type="number" id="normal" min="0" max="24" step=".5" value="8"></div>
+<div class="field"><label>Catégorie HS</label><select id="hsType"><option value="weekdayDay">Jour de semaine — jour (05h–21h)</option><option value="weekdayNight">Jour de semaine — nuit (21h–05h)</option><option value="restDay">Repos/férié — jour (05h–21h)</option><option value="restNight">Repos/férié — nuit (21h–05h)</option></select></div>
+<div class="field"><label>Heures supplémentaires</label><input type="number" id="overtime" min="0" max="24" step=".5" value="0"></div>
+<div class="field"><label>HS prises en charge par l’astreinte (à déduire)</label><input type="number" id="oncall" min="0" max="24" step=".5" value="0"></div>
+<div class="field"><label>Heure de départ (mission)</label><input type="time" id="departTime"></div>
+<div class="field"><label>Lieu de départ</label><input id="departPlace" placeholder="Lieu"></div>
+<div class="field"><label>Heure de retour</label><input type="time" id="returnTime"></div>
+<div class="field"><label>Lieu de retour</label><input id="returnPlace" placeholder="Lieu"></div>
+<div class="field"><label>Kilométrage</label><input type="number" id="km" min="0" step="1" value="0"></div>
+<div class="field"><label>Repas facturé ?</label><select id="meal"><option>Non</option><option>Oui</option></select></div>
+<div class="field"><label>Hébergement facturé ?</label><select id="hotel"><option>Non</option><option>Oui</option></select></div>
+</div>
+<div class="field"><label>Tâches effectuées / objet de mission</label><textarea id="task" placeholder="Décrire le travail effectué ou la raison de la mission"></textarea></div>
+<div class="actions"><button class="primary" type="submit">Enregistrer la journée</button><button class="secondary" type="button" id="clearForm">Vider le formulaire</button></div>
+</form>
+<section class="card"><h2>Enregistrements du mois</h2><div id="dailyEntries"></div></section>
+</section>
+<section id="summary" class="tab-content hidden">
+<div class="card"><h2>Résumé mensuel</h2><div class="stats"><div class="stat"><small>Jours enregistrés</small><strong id="daysCount">0</strong></div><div class="stat"><small>Heures normales</small><strong id="normalTotal">0</strong></div><div class="stat"><small>HS brutes</small><strong id="otTotal">0</strong></div></div>
+<div class="actions no-print" style="margin-top:12px"><button class="secondary" id="printSummary">Imprimer / PDF</button><button class="secondary" id="csv">Exporter CSV</button><button class="secondary" id="backup">Sauvegarder JSON</button><label class="secondary" style="text-align:center;cursor:pointer">Importer sauvegarde<input id="restore" type="file" accept=".json,application/json" hidden></label></div>
+<div class="note" style="margin-top:10px">Les totaux affichés sont calculés à partir des saisies. Le document officiel doit être contrôlé et validé par la hiérarchie.</div></div>
+<div id="summaryReport" class="card report"></div>
+</section>
+<section id="declaration" class="tab-content hidden"><div class="card report-controls no-print"><h2>Déclaration mensuelle d’heures supplémentaires</h2><p>Imprimez ce document après avoir vérifié les dates, les heures et les tâches.</p><button class="primary" onclick="printReport('declarationReport')">Imprimer cette déclaration / PDF</button></div><div id="declarationReport" class="card report report-page"></div></section>
+<section id="authorization" class="tab-content hidden"><div class="card report-controls no-print"><h2>Autorisation d’effectuer des heures supplémentaires</h2><p>Document de préparation. Les heures prévues et les motifs doivent être confirmés par la hiérarchie.</p><button class="primary" onclick="printReport('authorizationReport')">Imprimer cette autorisation / PDF</button></div><div id="authorizationReport" class="card report report-page"></div></section>
+<section id="mission" class="tab-content hidden"><div class="card report-controls no-print"><h2>Fiche de suivi</h2><p>Les informations de mission sont reprises des saisies journalières.</p><button class="primary" onclick="printReport('missionReport')">Imprimer cette fiche / PDF</button></div><div id="missionReport" class="card report report-page"></div></section>
+</main>
+<script>
+const $=id=>document.getElementById(id), KEY='sonelgaz_rh_app_v2';
+const now=new Date(), monthNow=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+$('month').value=monthNow;$('date').value=now.toISOString().slice(0,10);
+let records=[];try{records=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){records=[]}
+const fields=['worker','matricule','service','fonction','structure'];
+fields.forEach(id=>{const el=$(id);el.addEventListener('change',saveMeta)});
+function saveMeta(){localStorage.setItem(KEY+'_meta',JSON.stringify(Object.fromEntries(fields.map(id=>[id,$(id).value]))))}
+try{const m=JSON.parse(localStorage.getItem(KEY+'_meta')||'{}');fields.forEach(id=>{if(m[id])$(id).value=m[id]})}catch(e){}
+function persist(){localStorage.setItem(KEY,JSON.stringify(records));render()}
+function month(){return $('month').value||monthNow}
+function list(){return records.filter(r=>r.date&&r.date.slice(0,7)===month()).sort((a,b)=>a.date.localeCompare(b.date))}
+function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function meta(){return {worker:$('worker').value,matricule:$('matricule').value,service:$('service').value,fonction:$('fonction').value,structure:$('structure').value,month:month()}}
+function monthLabel(){const [y,m]=month().split('-');return `${m}/${y}`}
+const catLabels={weekdayDay:'Semaine — jour (05h–21h)',weekdayNight:'Semaine — nuit (21h–05h)',restDay:'Repos/férié — jour (05h–21h)',restNight:'Repos/férié — nuit (21h–05h)'};
+function total(key){return list().reduce((s,r)=>s+(Number(r[key])||0),0)}
+function header(title,sub=''){let m=meta();return `<div style="font-size:12px">Région Transport de l’Électricité Blida</div><div style="font-size:12px">Direction de transport d’Électricité Blida</div><h2>${title}</h2>${sub?`<h3>${sub}</h3>`:''}<div class="meta"><div><b>Nom et prénom :</b> ${esc(m.worker)}<br><b>Fonction :</b> ${esc(m.fonction)}<br><b>Structure d’appartenance :</b> ${esc(m.structure)}</div><div><b>Matricule :</b> ${esc(m.matricule)}<br><b>Code de service :</b> ${esc(m.service)}<br><b>Mois :</b> ${esc(monthLabel())}</div></div>`}
+function signatures(){return `<div class="signatures"><div>Signature de la hiérarchie directe :<br><br><br>Date :</div><div>Le Directeur :<br><br><br>Date :</div></div>`}
+function table(headers,rows){return `<table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`}
+function render(){
+ const a=list();
+ $('daysCount').textContent=a.length;$('normalTotal').textContent=total('normal');$('otTotal').textContent=total('overtime');
+ $('dailyEntries').innerHTML=a.length?a.map(r=>`<article class="entry"><div class="entrytop"><span>${esc(r.date.split('-').reverse().join('/'))} · ${esc(r.status)}</span><span>${esc(r.overtime||0)} HS</span></div><div class="muted">${esc(r.normal||0)} h normales · ${esc(catLabels[r.hsType])} · astreinte: ${esc(r.oncall||0)} h</div><div style="margin-top:5px">${esc(r.task||'—')}</div><div class="actions no-print" style="margin-top:8px"><button class="danger" onclick="del('${r.id}')">Supprimer</button></div></article>`).join(''):'<div class="empty">Aucune saisie pour ce mois.</div>';
+ $('summaryReport').innerHTML=header('COMPTE-RENDU MENSUEL')+`<p><b>Nombre de jours enregistrés :</b> ${a.length} &nbsp; <b>Heures normales :</b> ${total('normal')} &nbsp; <b>Heures supplémentaires :</b> ${total('overtime')}</p>`+table(['Date','Situation','H. normales','H. supplémentaires','Catégorie HS','Travaux effectués'],a.map(r=>`<tr><td>${esc(r.date)}</td><td>${esc(r.status)}</td><td>${esc(r.normal||0)}</td><td>${esc(r.overtime||0)}</td><td>${esc(catLabels[r.hsType])}</td><td class="task">${esc(r.task)}</td></tr>`))+signatures();
+ $('declarationReport').innerHTML=header('DÉCLARATION MENSUELLE D’HEURES SUPPLÉMENTAIRES','Réalisées à la demande ou avec l’accord de la hiérarchie')+table(['Date et heure','HS semaine jour<br>(05h–21h)','HS semaine nuit<br>(21h–05h)','HS repos/férié jour<br>(05h–21h)','HS repos/férié nuit<br>(21h–05h)','HS astreinte<br>(à déduire)','Tâches effectuées'],a.map(r=>`<tr><td>${esc(r.date)}</td><td>${r.hsType==='weekdayDay'?esc(r.overtime):''}</td><td>${r.hsType==='weekdayNight'?esc(r.overtime):''}</td><td>${r.hsType==='restDay'?esc(r.overtime):''}</td><td>${r.hsType==='restNight'?esc(r.overtime):''}</td><td>${esc(r.oncall||'')}</td><td class="task">${esc(r.task)}</td></tr>`))+`<p><b>Total HS déclarées :</b> ${total('overtime')} &nbsp;&nbsp; <b>HS prises en charge par l’astreinte (à déduire) :</b> ${total('oncall')}</p><p style="font-size:11px">*1 semaine = du samedi au jeudi inclus.</p>`+signatures();
+ $('authorizationReport').innerHTML=header('AUTORISATION D’EFFECTUER DES HEURES SUPPLÉMENTAIRES')+table(['Date et heure','Semaine — jour','Semaine — nuit','Repos/férié — jour','Repos/férié — nuit','Explication détaillée des motifs / tâches à effectuer'],a.filter(r=>Number(r.overtime)>0).map(r=>`<tr><td>${esc(r.date)}</td><td>${r.hsType==='weekdayDay'?esc(r.overtime):''}</td><td>${r.hsType==='weekdayNight'?esc(r.overtime):''}</td><td>${r.hsType==='restDay'?esc(r.overtime):''}</td><td>${r.hsType==='restNight'?esc(r.overtime):''}</td><td class="task">${esc(r.task)}</td></tr>`))+`<p><b>Total HS prévues dans les saisies :</b> ${a.filter(r=>Number(r.overtime)>0).reduce((s,r)=>s+(+r.overtime||0),0)} h</p><p style="font-size:11px">Le modèle source fourni mentionne une limite de 32 heures/mois et une procédure en cas de dépassement. Vérifier la règle RH en vigueur avant utilisation.</p>`+signatures();
+ $('missionReport').innerHTML=header('FICHE DE SUIVI')+table(['Date','Heure départ','Lieu départ','Heure retour','Lieu retour','Km','Repas facturé','Hébergement facturé','Objet de mission / tâche effectuée'],a.map(r=>`<tr><td>${esc(r.date)}</td><td>${esc(r.departTime)}</td><td>${esc(r.departPlace)}</td><td>${esc(r.returnTime)}</td><td>${esc(r.returnPlace)}</td><td>${esc(r.km||0)}</td><td>${esc(r.meal)}</td><td>${esc(r.hotel)}</td><td class="task">${esc(r.task)}</td></tr>`))+signatures();
+}
+window.del=id=>{if(confirm('Supprimer cette saisie ?')){records=records.filter(r=>r.id!==id);persist()}};
+$('entryForm').addEventListener('submit',e=>{e.preventDefault();let d=$('date').value;if(records.some(r=>r.date===d)&&!confirm('Une saisie existe déjà à cette date. Ajouter une deuxième ligne quand même ?'))return;records.push({id:Date.now().toString(),date:d,status:$('status').value,normal:$('normal').value,overtime:$('overtime').value,hsType:$('hsType').value,oncall:$('oncall').value,departTime:$('departTime').value,departPlace:$('departPlace').value,returnTime:$('returnTime').value,returnPlace:$('returnPlace').value,km:$('km').value,meal:$('meal').value,hotel:$('hotel').value,task:$('task').value});persist();$('task').value='';$('overtime').value='0';$('oncall').value='0';alert('Saisie enregistrée.');});
+$('clearForm').onclick=()=>{$('entryForm').reset();$('date').value=now.toISOString().slice(0,10);$('normal').value=8;$('overtime').value=0;$('oncall').value=0;$('km').value=0};
+$('month').addEventListener('change',render);
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.tab-content').forEach(x=>x.classList.toggle('hidden',x.id!==b.dataset.tab));render()});
+window.printReport=id=>{document.querySelectorAll('.report-page').forEach(x=>x.classList.remove('printing'));$(id).classList.add('printing');window.print();setTimeout(()=>$(id).classList.remove('printing'),700)};
+$('printSummary').onclick=()=>{document.querySelectorAll('.report-page').forEach(x=>x.classList.remove('printing'));$('summaryReport').classList.add('printing');window.print();setTimeout(()=>$('summaryReport').classList.remove('printing'),700)};
+function download(name,content,type){let blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+$('csv').onclick=()=>{let rows=[['Date','Situation','Heures normales','HS','Categorie HS','Astreinte','Depart','Lieu depart','Retour','Lieu retour','Km','Repas','Hebergement','Taches']];list().forEach(r=>rows.push([r.date,r.status,r.normal,r.overtime,catLabels[r.hsType],r.oncall,r.departTime,r.departPlace,r.returnTime,r.returnPlace,r.km,r.meal,r.hotel,r.task]));download(`Pointage_${meta().matricule}_${month()}.csv`,'\ufeff'+rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n'),'text/csv;charset=utf-8')};
+$('backup').onclick=()=>download(`Sauvegarde_Pointage_${month()}.json`,JSON.stringify({meta:meta(),records},null,2),'application/json');
+$('restore').onchange=e=>{let f=e.target.files[0];if(!f)return;let rd=new FileReader();rd.onload=()=>{try{let data=JSON.parse(rd.result);if(!Array.isArray(data.records))throw Error();records=data.records;persist();alert('Sauvegarde importée.')}catch(err){alert('Fichier de sauvegarde non valide.')}};rd.readAsText(f);e.target.value=''};
+render();
+</script>
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+}
+</script>
+</body></html>

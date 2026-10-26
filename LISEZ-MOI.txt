@@ -1,0 +1,12 @@
+POINTAGE SONELGAZ RH — VERSION INSTALLABLE HORS LIGNE
+
+CONTENU
+- index.html : application
+- manifest.webmanifest : paramètres d'installation
+- sw.js : cache hors ligne
+- icon-192.png / icon-512.png : icônes
+
+IMPORTANT
+Un fichier HTML ouvert directement depuis Téléchargements ne peut pas activer un service worker ni être installé comme PWA dans Chrome. Pour obtenir une icône installable et l'utilisation hors ligne, hébergez ces fichiers une seule fois sur une adresse HTTPS (par exemple GitHub Pages), ouvrez l'adresse avec Chrome, choisissez « Installer l'application » ou « Ajouter à l'écran d'accueil », puis ouvrez-la une fois en ligne. Après que le cache est créé, l'application et ses fonctions locales peuvent fonctionner hors ligne.
+
+Les enregistrements sont conservés dans le stockage local du navigateur/appareil. Exportez régulièrement vos données en sauvegarde. L'envoi des documents RH nécessite internet.
